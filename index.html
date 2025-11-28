@@ -93,6 +93,11 @@
             box-sizing: border-box;
             font-size: 16px;
         }
+        
+        /* 优化时间选择器样式：鼠标变成小手 */
+        input[type="time"] {
+            cursor: pointer;
+        }
 
         .radio-group {
             display: flex;
@@ -169,7 +174,7 @@
             padding: 10px;
             position: absolute;
             z-index: 1;
-            bottom: 125%; /* Position above */
+            bottom: 125%; 
             left: 50%;
             margin-left: -125px;
             opacity: 0;
@@ -295,6 +300,24 @@
 </div>
 
 <script>
+    // --- 新增逻辑：点击输入框任意位置弹出时间选择器 ---
+    document.addEventListener('DOMContentLoaded', function() {
+        const timeInputs = document.querySelectorAll('input[type="time"]');
+        timeInputs.forEach(input => {
+            input.addEventListener('click', function() {
+                // 只有支持 showPicker 的现代浏览器才执行 (Chrome 99+, Safari 16+, Firefox 101+)
+                if (typeof this.showPicker === 'function') {
+                    try {
+                        this.showPicker();
+                    } catch (e) {
+                        // 忽略错误（防止已经在打开状态时报错）
+                    }
+                }
+            });
+        });
+    });
+    // ---------------------------------------------
+
     function switchTab(mode) {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
